@@ -18,8 +18,12 @@ skip-external-locking
 bind-address    = <%= bind_address %>
 <% end %> 
 
+<% if serverid %>
+server-id=<%= serverid %>
+<% end %>
+
 key_buffer         = 16M
-max_allowed_packet = 16M
+max_allowed_packet = 52M
 thread_stack       = 192K
 thread_cache_size  = 8
 myisam-recover     = BACKUP
@@ -28,9 +32,13 @@ query_cache_size   = 16M
 log_error          = <%= log_error %>
 expire_logs_days   = 10
 max_binlog_size    = 100M
-<% if default_engine != 'UNSET' %>
-default-storage-engine = <%= default_engine %>
-<% end %>
+
+innodb-file-per-table=1
+log-bin=mysql-bin
+innodb-flush-method=O_DIRECT
+innodb-thread-concurrency=0
+default-storage-engine=innodb
+
 <% if ssl == true %>
 ssl-ca    = <%= ssl_ca %>
 ssl-cert  = <%= ssl_cert %>
